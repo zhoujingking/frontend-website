@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carousel</title>
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+    }
+    .carousel-container {
+      /* overflow: hidden; */
+      width: 200px;
+      height: 100px;
+    }
+    .carousel-item-list {
+      display: flex;
+      height: 100%;
+      transition: transform 1s;
+    }
+    .carousel-item {
+      flex-shrink: 0;
+      width: 200px;
+      height: 100%;
+      vertical-align: middle;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="carousel-container">
+      <div class="carousel-item-list">
+        <div class="carousel-item" style="background-color: aqua;">1</div>
+        <div class="carousel-item" style="background-color: coral;">2</div>
+        <div class="carousel-item" style="background-color: firebrick;">3</div>
+      </div>
+    </div>
+    <button id="leftBtn">left</button>
+    <button id="rightBtn">right</button>
+  </div>
+  <script>
+    const container = document.querySelector('.carousel-item-list')
+
+    const childNodes = container.childElementCount;
+
+
+    // first carousel item is on index 1
+    let currnetIndex = 0
+    const prev = () => {
+      if (currnetIndex === 1) {
+        currnetIndex = childNodes + 1;
+        container.style.transform = `translateX(-${currnetIndex * 100}%)`
+        container.style.transition = 'none';
+        container.clientHeight; // force rendering
+      }
+      currnetIndex--
+      container.style.transform = `translateX(-${currnetIndex * 100}%)`
+      container.style.transition = 'transform 1s';
+    }
+    const next = () => {
+      if (currnetIndex === 3) {
+        currnetIndex = 0;
+        container.style.transform = `translateX(-${currnetIndex * 100}%)`
+        container.style.transition = 'none';
+        container.clientHeight; // force rendering
+      }
+      currnetIndex++
+      container.style.transform = `translateX(-${currnetIndex * 100}%)`
+      container.style.transition = 'transform 1s';
+    }
+
+    const firstChildClone = container.firstElementChild.cloneNode(true)
+    const lastChildClone = container.lastElementChild.cloneNode(true)
+    container.insertBefore(lastChildClone, container.firstElementChild)
+    container.appendChild(firstChildClone)
+
+    next(); // currentIndex === 1
+
+    document.getElementById('leftBtn').addEventListener('click', () => {
+      prev();
+    })
+    document.getElementById('rightBtn').addEventListener('click', () => {
+      next();
+    })
+  </script>
+</body>
+</html>
